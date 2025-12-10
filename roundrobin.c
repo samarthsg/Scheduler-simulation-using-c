@@ -72,7 +72,9 @@ int main(){
         {3, 0, false, 20, false},
     };
 
-    for(int i = 0; i < 3; i++){
+    int n = sizeof(p) / sizeof(p[0]);
+
+    for(int i = 0; i < n; i++){
         enqueue(&contain, p[i].id);
     }
 
