@@ -1,51 +1,6 @@
 #include <stdbool.h>
 #include <stdio.h>
-#define max_size 11
-
-typedef struct{
-    int item[max_size];
-    int front;
-    int rear;
-} queue;
-
-
-bool qisfull(queue *q){
-    if((q->rear+1) % max_size == q->front) return true;
-    else return false;
-}
-
-bool qisempty(queue *q){
-    if(q->front == -1) return true;
-    else return false;
-}
-
-void enqueue(queue *q, int value){
-    if(qisfull(q) == true){
-        printf("queue is full cant insert");
-        return;
-    }
-    q->item[q->rear] = value;
-    q->rear = (q->rear+1)%max_size;
-    if(q->front == -1) q->front = 0;
-}
-
-void dqueue(queue *q){
-    if(qisempty(q) == true){
-        printf("Already empty Underflow!");
-        return;
-    }
-    q->front = (q->front+1)%max_size;
-    if(q->front == q->rear){
-        q->front = -1;
-        q->rear = 0;
-    }
-}
-
-int front_value(queue *q){
-    int temp = q->item[q->front];
-    return temp;
-}
-
+#include "queue.h"
 /*
 bool check_for_completion(){
     bool result = false;
@@ -92,6 +47,10 @@ int main(){
         {3, 9, 0, false, 38, false},
     };
 
+    queue ready;
+    ready.front = -1;
+    ready.rear = 0;
+
     int n = sizeof(p) / sizeof(p[0]);
 
     for(int i = 0; i < n; i++){
@@ -115,3 +74,8 @@ int main(){
     }
     return 0;
 }
+/* TODO: Create a function to scan the whole process array and grab the highest_priority using a for looop and in if condition use && for p.complete == false to ensure not to get the already done procces
+ * TODO: Dont create another queue just push the same highest_priority processes into the contain array
+ * TODO: Rewrite the whole scheduler logic suppporting this
+ * TODO: Clean the queue before entering new data so have to create new clean fucntion for the queue
+ * TODO: Refer to chatgpt chat self doubt in programming */
