@@ -1,14 +1,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include "queue.h"
-/*
-bool check_for_completion(){
-    bool result = false;
-    return (bool)result;
-}
 
-Will use this later for blocked state
-*/
 struct process{
     int priority;
     int id;
