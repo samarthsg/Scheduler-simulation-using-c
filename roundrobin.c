@@ -1,3 +1,4 @@
+#include <iso646.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include "queue.h"
@@ -11,13 +12,12 @@ struct process{
     bool blocked;
 };
 
-int highest_priority(queue *q, struct process p[]){
+int highest_priority(struct process p[], int n){
     int highest = 0;
-    int i = q->front+1;
-    while(i < q->rear){
-        int temp = q->item[i];
-        if(p[temp - 1].priority > highest) highest = q->item[i];
-        i++;
+    for(int i=0; i<n; i++){
+        if (p[i].priority > p[highest].priority && p[i].complete == false){
+            highest = p[i].priority;
+        }
     }
     return highest;
 }
@@ -46,9 +46,6 @@ int main(){
 
     int n = sizeof(p) / sizeof(p[0]);
 
-    for(int i = 0; i < n; i++){
-        enqueue(&contain, i);
-    }
 
     while(qisempty(&contain) == false){
         int idx = front_value(&contain);
@@ -67,8 +64,3 @@ int main(){
     }
     return 0;
 }
-/* TODO: Create a function to scan the whole process array and grab the highest_priority using a for looop and in if condition use && for p.complete == false to ensure not to get the already done procces
- * TODO: Dont create another queue just push the same highest_priority processes into the contain array
- * TODO: Rewrite the whole scheduler logic suppporting this
- * TODO: Clean the queue before entering new data so have to create new clean fucntion for the queue
- * TODO: Refer to chatgpt chat self doubt in programming */
