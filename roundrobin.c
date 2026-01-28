@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include "queue.h"
+#define Max_priority 3
 
 struct process{
     int priority;
@@ -12,20 +13,15 @@ struct process{
     bool blocked;
 };
 
-int highest_priority(struct process p[], int n){
-    int highest = 0;
+void enqueue_priority(struct process *p, queue ready[], int n){
     for(int i=0; i<n; i++){
-        if (p[i].priority > p[highest].priority && p[i].complete == false){
-            highest = p[i].priority;
-        }
+        int prio = p[i].priority;
+        enqueue(&ready[prio-1], p[i].id);
     }
-    return highest;
+
 }
 
 int main(){
-    queue contain;
-    contain.front = -1;
-    contain.rear = 0;
 
     struct process p[10] = {
         {2, 0, 0, false, 15, false},
@@ -40,12 +36,12 @@ int main(){
         {3, 9, 0, false, 38, false},
     };
 
-    queue ready;
-    ready.front = -1;
-    ready.rear = 0;
+    queue ready[Max_priority];
 
-    int n = sizeof(p) / sizeof(p[0]);
-
+    for(int i=0; i<Max_priority; i++){
+        init_queue(&ready[i]);
+    }
+    enqueue_priority(p, ready, 10);
 
     while(qisempty(&contain) == false){
         int idx = front_value(&contain);
@@ -62,5 +58,6 @@ int main(){
             enqueue(&contain, idx);
         }
     }
+
     return 0;
 }

@@ -38,3 +38,8 @@ int front_value(queue *q){
     int temp = q->item[q->front];
     return temp;
 }
+
+void init_queue(queue *q){
+    q->front = -1;
+    q->rear = 0;
+}

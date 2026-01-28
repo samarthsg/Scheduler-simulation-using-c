@@ -16,5 +16,5 @@ bool qisempty(queue *q);
 void enqueue(queue *q, int value);
 void dqueue(queue *q);
 int front_value(queue *q);
-
+void init_queue(queue *q);
 #endif
