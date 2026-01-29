@@ -1,0 +1,15 @@
+# Compiled binaries
+roundrobin
+*.o
+*.out
+*.exe
+
+# Temporary files
+*.tmp
+*~
+.*.swp
+
+# IDE files
+.vscode/
+.idea/
+*.iml
