@@ -43,19 +43,44 @@ int main(){
     }
     enqueue_priority(p, ready, 10);
 
-    while(qisempty(&contain) == false){
-        int idx = front_value(&contain);
+    // Scheduler loop - uses priority queues efficiently
+    // Time Complexity: O(n) where n is total number of processes
+    // Each process is dequeued and processed exactly once (or re-enqueued after time slice)
+    // Finding highest priority queue is O(Max_priority) which is constant
+    bool all_done = false;
+    while(!all_done){
+        // Find highest priority non-empty queue - O(Max_priority) = O(1) since Max_priority is constant
+        int selected_priority = -1;
+        for(int prio = 0; prio < Max_priority; prio++){
+            if(!qisempty(&ready[prio])){
+                selected_priority = prio;
+                break;
+            }
+        }
+        
+        // If no queue has processes, all are done
+        if(selected_priority == -1){
+            all_done = true;
+            break;
+        }
+        
+        // Get process from highest priority queue - O(1)
+        int idx = front_value(&ready[selected_priority]);
+        dqueue(&ready[selected_priority]);
+        
+        // Execute process for one time slice
         p[idx].progress++;
-        printf("Process no %d is executing: progress %d is out of %d is done\n", idx, p[idx].progress, p[idx].progress_end);
+        printf("Process no %d (priority %d) is executing: progress %d out of %d is done\n", 
+               idx, p[idx].priority, p[idx].progress, p[idx].progress_end);
+        
+        // Check if process is complete
         if(p[idx].progress >= p[idx].progress_end){
             p[idx].complete = true;
-            dqueue(&contain);
             printf("Process no %d is done and now terminated\n", idx);
-
         }
         else{
-            dqueue(&contain);
-            enqueue(&contain, idx);
+            // Re-enqueue to its priority queue - O(1)
+            enqueue(&ready[p[idx].priority - 1], idx);
         }
     }
 
