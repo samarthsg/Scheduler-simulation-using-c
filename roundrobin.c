@@ -44,12 +44,15 @@ int main(){
     enqueue_priority(p, ready, 10);
 
     // Scheduler loop - uses priority queues efficiently
-    // Time Complexity: O(n) where n is total number of processes
-    // Each process is dequeued and processed exactly once (or re-enqueued after time slice)
-    // Finding highest priority queue is O(Max_priority) which is constant
-    bool all_done = false;
-    while(!all_done){
-        // Find highest priority non-empty queue - O(Max_priority) = O(1) since Max_priority is constant
+    // Time Complexity per scheduling decision: O(1)
+    // - Finding highest priority queue: O(Max_priority) = O(1) since Max_priority is constant
+    // - Queue operations (enqueue/dequeue): O(1)
+    // Total iterations: sum of all process progress_end values
+    // This avoids O(n^2) by not scanning all processes each iteration
+    while(true){
+        // Find highest priority non-empty queue - O(Max_priority) = O(1)
+        // Processes with priority 1 are at index 0, priority 2 at index 1, etc.
+        // So we scan from index 0 to get highest priority (lowest number) first
         int selected_priority = -1;
         for(int prio = 0; prio < Max_priority; prio++){
             if(!qisempty(&ready[prio])){
@@ -60,7 +63,6 @@ int main(){
         
         // If no queue has processes, all are done
         if(selected_priority == -1){
-            all_done = true;
             break;
         }
         
