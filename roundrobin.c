@@ -43,19 +43,25 @@ int main(){
     }
     enqueue_priority(p, ready, 10);
 
-    while(qisempty(&contain) == false){
-        int idx = front_value(&contain);
-        p[idx].progress++;
-        printf("Process no %d is executing: progress %d is out of %d is done\n", idx, p[idx].progress, p[idx].progress_end);
-        if(p[idx].progress >= p[idx].progress_end){
-            p[idx].complete = true;
-            dqueue(&contain);
-            printf("Process no %d is done and now terminated\n", idx);
+    int k = 0;
+    while(k < Max_priority){
+        if(qisempty(&ready[k]) == false){
+            int idx = front_value(&ready[k]);
+            p[idx].progress++;
+            printf("Process no %d is executing: progress %d is out of %d is done\n", idx, p[idx].progress, p[idx].progress_end);
+            if(p[idx].progress >= p[idx].progress_end){
+                p[idx].complete = true;
+                dqueue(&ready[k]);
+                printf("Progress no %d is done and now terminated\n", idx);
 
+            }
+            else{
+                dqueue(&ready[k]);
+                enqueue(&ready[k], idx);
+            }
         }
         else{
-            dqueue(&contain);
-            enqueue(&contain, idx);
+            k++;
         }
     }
 
